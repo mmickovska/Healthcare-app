@@ -1,0 +1,43 @@
+<%- include('../partials/header') %>
+  <div>
+    <h2>Patients</h2>
+    <table  class="table-info">
+      <thead>
+        <tr>
+          <th class="th-add">
+            <a href="/patients/create" class="btn-create">Add new patient</a>
+          </th>
+        </tr>
+        <tr>
+          <th scope="col">SSN</th>
+          <th scope="col">Full Name</th>
+          <th scope="col">Age</th>
+          <th scope="col">Phone Number</th>
+          <th scope="col">City</th>
+          <th scope="col">Doctor</th>
+          <th colspan="2" scope="col">Actions</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% patients.forEach(patient => { %>
+        <tr>
+          <td scope="row"><%= patient.ssn %></td>
+          <td><%= patient.full_name %></td>
+          <td><%= patient.age %></td>
+          <td><%= patient.phone_number %></td>
+          <td><%= patient.city %></td>
+          <td><%= patient.doctor ? patient.doctor.full_name : 'N/A' %></td>
+          <td>
+            <a href="/patients/<%= patient._id %>" class="btn btn-warning">Edit</a>
+          </td>
+          <td>
+            <button type="button" onclick="deletePatient(`<%= patient._id %>`)" class="btn btn-danger">Delete</button>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<%- include('../partials/footer') %>

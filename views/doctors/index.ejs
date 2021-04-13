@@ -1,0 +1,43 @@
+<%- include('../partials/header') %>
+ <div>
+    <h2>Doctors</h2>
+    
+    <table class="table-info">      
+      <thead>
+        <tr>
+          <th class="th-add">
+            <a href="/doctors/create" class="btn-create">Add new doctor</a>
+          </th>
+        </tr>
+        <tr>
+          <th scope="col">License No.</th>
+          <th scope="col">Name</th>
+          <th scope="col">Specialization</th>
+          <th scope="col">City</th>
+          <th colspan="3" scope="col">Actions</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% doctors.forEach(doctor => { %>
+        <tr>
+          <td scope="row"><%= doctor.licence_number %></td>
+          <td><%= doctor.full_name %></td>
+          <td><%= doctor.specialization %></td>
+          <td><%= doctor.city %></td>
+          <td>
+            <a href="/doctors/<%= doctor._id %>" class="btn btn-warning">Edit</a>
+            </td>
+          <td>
+            <button type="button" onclick="deleteDoctor(`<%= doctor._id %>`)" class="btn btn-danger">Delete</button>
+          </td>
+          <td>
+            <a href="/doctors/<%= doctor._id %>/patients" class="btn btn-secondary">Patients</a>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<%- include('../partials/footer') %>

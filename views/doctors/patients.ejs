@@ -1,0 +1,47 @@
+<%- include('../partials/header.ejs') %>
+  <div class="doctor-patients">
+    <div class="card">
+      <div class="card-body">
+        <h5><%= doctors.full_name %></h5>
+        <h6>
+          <span class="badge rounded-pill bg-success"><%= doctors.specialization %></span>
+        </h6>
+        <span >License no. <%= doctors.licence_number %></span><br>
+        <small">Works in <%= doctors.city %></small>
+      </div>
+      <h2>Patients</h2>
+    <table class="table-info">
+      <theads>
+        <tr>
+          <th colspan="5">
+            <a href="/patients/create" class="btn-create">Add new patient</a>
+          </th>
+        </tr>
+        <tr>
+          <th scope="col">SSN</th>
+          <th scope="col">Full Name</th>
+          <th scope="col">Age</th>
+          <th scope="col">Phone Number</th>
+          <th scope="col">City</th>
+        </tr>
+      </theads>
+        <tbody>
+          <% patients.forEach(patient => { %>
+            <% if (doctors._id.equals(patient.doctor)) { %>
+              <tr>
+                <td><%= patient.full_name %></td>
+                <td><%= patient.ssn %></td>
+                <td><%= patient.age %></td>
+                <td><%= patient.phone_number %></td>
+                <td><%= patient.city %></td>
+              </tr>
+            <% } else { %> 
+              <% } 
+            %> <% }) 
+          %>
+        </tbody>
+    </table>
+    </div>
+    
+  </div>
+  <%- include('../partials/footer.ejs') %>
