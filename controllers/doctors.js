@@ -41,7 +41,7 @@ module.exports = {
         );
       } else {
         Doctor.find(
-          { $or: [{ full_name: regex }, { city: regex }] },
+          { $or: [{ full_name: regex }, { city: regex }, { specialization: regex}] },
           function (err, allDoctors) {
             if (err) {
               console.log(err);
