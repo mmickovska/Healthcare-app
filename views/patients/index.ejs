@@ -1,6 +1,26 @@
 <%- include('../partials/header') %>
   <div>
     <h2>Patients</h2>
+    <div class="row justify-content-center">      
+      <div class="col-12 col-md-10 col-lg-8">
+        
+        <form action="/patients" method="GET" class="card card-sm">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <input type="text" name="search" class="form-control" placeholder="Enter text for searching" aria-label="Text input field">
+            </div>
+            <select name="select" class="custom-select" id="inputGroupSelect01">
+              <option selected value="all">All</option>
+              <option value="ssn">SSN</option>
+              <option value="fullName">Full Name</option>
+              <option value="city">City</option>
+              <option value="age">Age</option>
+              <option value="doctor">Doctor</option>
+            </select>
+          </div>
+          </div>
+        </form>
+    </div>
     <table  class="table-info">
       <thead>
         <tr>

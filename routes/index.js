@@ -19,6 +19,7 @@ router
   .delete("/doctors/:id", doctorsController.delete)
   
   .get("/patients", patientsController.getAll)
+  // .get("/patients", patientsController.getBySearch)
   .get("/patients/create", patientsController.create)
   .get("/patients/:id", patientsController.getOne)
   .post("/patients", patientsController.postCreate)

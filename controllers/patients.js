@@ -2,10 +2,84 @@ const Patient = require('../models/patient');
 const Doctor = require('../models/doctor');
 
 module.exports = {
-  getAll: async (req, res) => {
-    const patients = await Patient.find().populate('doctor');
+  // getAll: async (req, res) => {
+  //   const patients = await Patient.find().populate('doctor');
 
-    res.render('patients/index', { patients: patients })
+  //   res.render('patients/index', { patients: patients })
+  // },
+  getAll: async (req, res) => {
+    if (req.query) {
+      console.log(req.query)
+      const regex = new RegExp(req.query.search, "gi");
+      if (req.query.select === "ssn") {
+        Patient.find({ $or: [{ ssn: regex }] }, function (err, patients) {
+          if (err) {
+            console.log(err);
+          } else {
+            res.render("patients/index", { patients: patients });
+          }
+        });
+      } else if (req.query.select === "fullName") {
+        Patient.find(
+          { $or: [{ full_name: regex }] },
+          function (err, patients) {
+            if (err) {
+              console.log(err);
+            } else {
+              res.render("patients/index", { patients: patients });
+            }
+          }
+        );
+      } else if (req.query.select === "city") {
+        Patient.find(
+          { $or: [{ city: regex }] },
+          function (err, patients) {
+            if (err) {
+              console.log(err);
+            } else {
+              res.render("patients/index", { patients: patients });
+            }
+          }
+        );
+      } else if (req.query.select === "age") {
+        Patient.find(
+          { $or: [{ age: regex }] },
+          function (err, patients) {
+            if (err) {
+              console.log(err);
+            } else {
+              res.render("patients/index", { patients: patients });
+            }
+          }
+        );
+      } else if (req.query.select === "doctor") {
+        Patient.find(
+          { $or: [{ doctor: regex }] },
+          function (err, patients) {
+            if (err) {
+              console.log(err);
+            } else {
+              res.render("patients/index", { patients: patients });
+            }
+          }
+        );
+      } else {
+        Patient.find(
+          { $or: [{ ssn: regex }, { full_name: regex }, { city: regex }, { specialization: regex}] },
+          function (err, patients) {
+            if (err) {
+              console.log(err);
+            } else {
+              res.render("patients/index", { patients: patients });
+            }
+          }
+        );
+      }
+    } else {
+      const patients = await Patient.find().populate('doctor');
+
+        res.render('patients/index', { patients: patients })
+    }
   },
   getOne: async (req, res) => {
     const patient = await Patient.findById(req.params.id);
