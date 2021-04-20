@@ -1,12 +1,27 @@
 <%- include('../partials/header') %>
 <div>
   <h2>Prescriptions</h2>
+  <div class="row justify-content-center">      
+    <div class="col-12 col-md-10 col-lg-8">
+      <form action="/prescriptions" method="GET" class="card card-sm">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <input type="text" name="search" class="form-control" placeholder="Enter text for searching" aria-label="Text input field">
+          </div>
+          <select name="select" class="custom-select" id="inputGroupSelect01">
+            <option selected value="all">All</option>
+            <option value="drug">Drug</option>
+            <option value="diagnose">Diagnose</option>           
+          </select>
+        </div>
+        </div>
+      </form>
+  </div>
   <table class="table-info">
     <thead>
       <tr>
-        <th class="th-add">
-          <a href="prescriptions/create" class="btn-create">
-            Create new prescription</a>
+        <th colspan="2" class="th-add">
+          <a href="prescriptions/create" class="btn-create">Add New</a>
         </th>
       </tr>
       <tr>
@@ -24,7 +39,7 @@
       <tr>
         <td scope="row"><%= prescription.drug_name %></td>
         <td><%= prescription.diagnose %></td>
-        <td><%= prescription.date %></td>
+        <td><%= prescription.date.toDateString()%></td>
         <td>
           <%= prescription.patient ? prescription.patient.full_name : 'N/A' %>
         </td>

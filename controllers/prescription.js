@@ -1,76 +1,132 @@
-const Patient = require('../models/patient');
-const Doctor = require('../models/doctor');
-const Prescription = require('../models/prescription');
+const Patient = require("../models/patient");
+const Doctor = require("../models/doctor");
+const Prescription = require("../models/prescription");
 
 module.exports = {
-  getAll: async (req, res) => {
-    const prescriptions = await Prescription.find().populate('doctor').populate('patient')
+  // getAll: async (req, res) => {
+  //   const prescriptions = await Prescription.find().populate('doctor').populate('patient')
 
-    res.render('prescriptions/index', { prescriptions: prescriptions })
+  //   res.render('prescriptions/index', { prescriptions: prescriptions })
+  // },
+  getAll: async (req, res) => {
+    if (req.query) {
+      // console.log(req.query)
+      const regex = new RegExp(req.query.search, "gi");
+      if (req.query.select === "drug") {
+        Prescription.find({ drug_name: regex }, function (err, prescriptions) {
+          if (err) {
+            console.log(err);
+          } else {
+            res.render("prescriptions/index", { prescriptions: prescriptions });
+          }
+        })
+          .populate("doctor")
+          .populate("patient");
+      } else if (req.query.select === "diagnose") {
+        Prescription.find({ diagnose: regex }, function (err, prescriptions) {
+          if (err) {
+            console.log(err);
+          } else {
+            res.render("prescriptions/index", { prescriptions: prescriptions });
+          }
+        })
+          .populate("doctor")
+          .populate("patient");
+      }else {
+        Prescription.find(
+          {
+            $or: [
+              { drug_name: regex },
+              { diagnose: regex },
+            ],
+          },
+          function (err, prescriptions) {
+            if (err) {
+              console.log(err);
+            } else {
+              res.render("prescriptions/index", {
+                prescriptions: prescriptions,
+              });
+            }
+          }
+        )
+          .populate("doctor",)
+          .populate("patient");
+      }
+    } else {
+      const prescriptions = await Prescription.find()
+        .populate("doctor")
+        .populate("patient");
+      res.render("prescriptions/index", {
+        prescriptions: prescriptions,
+      });
+    }
   },
   getOne: async (req, res) => {
-    const patients = await Patient.find()
-    const doctors = await Doctor.find()
-    const prescription = await Prescription.findById(req.params.id)
+    const patients = await Patient.find();
+    const doctors = await Doctor.find();
+    const prescription = await Prescription.findById(req.params.id);
 
-    res.render('prescriptions/update', {
+    res.render("prescriptions/update", {
       patients,
       doctors,
       prescription,
-    })
+    });
   },
   create: async (req, res) => {
-    const doctors = await Doctor.find()
-    const patients = await Patient.find()
+    const doctors = await Doctor.find();
+    const patients = await Patient.find();
 
-    res.render('prescriptions/create', { doctors, patients })
+    res.render("prescriptions/create", { doctors, patients });
   },
   postCreate: async (req, res) => {
     try {
-      if (req.body.doctor == '') {
+      if (req.body.doctor == "") {
         delete req.body.doctor;
       }
-      if (req.body.patient == '') {
-        delete req.body.patient
+      if (req.body.patient == "") {
+        delete req.body.patient;
       }
-    
+
       const prescription = new Prescription(req.body);
       await prescription.save();
 
-      res.redirect('/prescriptions');
+      res.redirect("/prescriptions");
     } catch (error) {
       console.log(error);
-      res.render('prescriptions/create', {
+      res.render("prescriptions/create", {
         ...req.body,
-        error: error.message
+        error: error.message,
       });
     }
   },
   postUpdate: async (req, res) => {
     try {
-      if (req.body.doctor == '') {
-        req.body.doctor = null
+      if (req.body.doctor == "") {
+        req.body.doctor = null;
       }
-      if (req.body.patient == '') {
-        req.body.patient = null
+      if (req.body.patient == "") {
+        req.body.patient = null;
       }
 
-      await Prescription.findByIdAndUpdate(req.params.id, req.body, { runValidators: true })
-      res.redirect('/prescriptions')
+      await Prescription.findByIdAndUpdate(req.params.id, req.body, {
+        runValidators: true,
+      });
+      res.redirect("/prescriptions");
     } catch (error) {
-      res.render('prescriptions/update', {
+      res.render("prescriptions/update", {
         ...req.body,
         _id: req.params.id,
-        error: error.message
-      })
+        error: error.message,
+      });
     }
   },
   delete: async (req, res) => {
-    await Prescription.findByIdAndRemove(req.params.id)
+    await Prescription.findByIdAndRemove(req.params.id);
 
     res.send({
       error: false,
-      message: `Prescription with id #${req.params.id} removed`
+      message: `Prescription with id #${req.params.id} removed`,
     });
-  }
-}
+  },
+};
