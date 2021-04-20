@@ -10,7 +10,7 @@ module.exports = {
     if (req.query) {
       const regex = new RegExp(req.query.search, "gi");
       if (req.query.select === "city") {
-        Doctor.find({ $or: [{ city: regex }] }, function (err, allDoctors) {
+        Doctor.find({ city: regex }, function (err, allDoctors) {
           if (err) {
             console.log(err);
           } else {
@@ -19,7 +19,7 @@ module.exports = {
         });
       } else if (req.query.select === "doctorName") {
         Doctor.find(
-          { $or: [{ full_name: regex }] },
+          {full_name: regex},
           function (err, allDoctors) {
             if (err) {
               console.log(err);
@@ -30,7 +30,7 @@ module.exports = {
         );
       } else if (req.query.select === "specialization") {
         Doctor.find(
-          { $or: [{ specialization: regex }] },
+          { specialization: regex },
           function (err, allDoctors) {
             if (err) {
               console.log(err);

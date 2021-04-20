@@ -9,19 +9,19 @@ module.exports = {
   // },
   getAll: async (req, res) => {
     if (req.query) {
-      console.log(req.query)
+      // console.log(req.query)
       const regex = new RegExp(req.query.search, "gi");
       if (req.query.select === "ssn") {
-        Patient.find({ $or: [{ ssn: regex }] }, function (err, patients) {
+        Patient.find({  ssn: regex }, function (err, patients) {
           if (err) {
             console.log(err);
           } else {
             res.render("patients/index", { patients: patients });
           }
-        });
+        }).populate('doctor');
       } else if (req.query.select === "fullName") {
         Patient.find(
-          { $or: [{ full_name: regex }] },
+          { full_name: regex},
           function (err, patients) {
             if (err) {
               console.log(err);
@@ -29,10 +29,10 @@ module.exports = {
               res.render("patients/index", { patients: patients });
             }
           }
-        );
+        ).populate('doctor');
       } else if (req.query.select === "city") {
         Patient.find(
-          { $or: [{ city: regex }] },
+          { city: regex },
           function (err, patients) {
             if (err) {
               console.log(err);
@@ -40,10 +40,10 @@ module.exports = {
               res.render("patients/index", { patients: patients });
             }
           }
-        );
+        ).populate('doctor');
       } else if (req.query.select === "age") {
         Patient.find(
-          { $or: [{ age: regex }] },
+          { age: regex },
           function (err, patients) {
             if (err) {
               console.log(err);
@@ -51,10 +51,10 @@ module.exports = {
               res.render("patients/index", { patients: patients });
             }
           }
-        );
+        ).populate('doctor');
       } else if (req.query.select === "doctor") {
         Patient.find(
-          { $or: [{ doctor: regex }] },
+          { doctor: regex},
           function (err, patients) {
             if (err) {
               console.log(err);
@@ -62,7 +62,7 @@ module.exports = {
               res.render("patients/index", { patients: patients });
             }
           }
-        );
+        ).populate('doctor');
       } else {
         Patient.find(
           { $or: [{ ssn: regex }, { full_name: regex }, { city: regex }, { specialization: regex}] },
@@ -73,11 +73,10 @@ module.exports = {
               res.render("patients/index", { patients: patients });
             }
           }
-        );
+        ).populate('doctor');
       }
     } else {
       const patients = await Patient.find().populate('doctor');
-
         res.render('patients/index', { patients: patients })
     }
   },
